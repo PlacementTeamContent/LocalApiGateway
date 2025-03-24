@@ -34,8 +34,9 @@ DAILY_TOKEN_LIMIT = 100000000
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',      # localhost
     '127.0.0.1',      # localhost
-    '10.10.55.224',   # KKH
+    '10.10.55.229',   # KKH
     '192.168.190.182' # SOHINI TECH PARK
     ]
 
