@@ -9,7 +9,7 @@ class APIKeyAdmin(admin.ModelAdmin):
     search_fields = ('user', 'key')  # Searchable fields
     list_filter = ('created_at', 'active', 'user')  # Filter options
     ordering = ('user','-created_at')  # Ordering of records
-    readonly_fields = ('created_at', 'key', 'user')  # Fields that should not be editable in the admin interface
+    readonly_fields = ('created_at', 'key')  # Fields that should not be editable in the admin interface
 
 
 @admin.register(models.TokenUsage)

@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import timedelta
 from django.utils import timezone
 import secrets
 
@@ -11,8 +10,8 @@ class APIKey(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"APIKey {self.key[:10]}... ({'Active' if self.active else 'Inactive'})"
-    
+        return f"{self.user}: APIKey {self.key[:10]}... ({'Active' if self.active else 'Inactive'})"
+
 class TokenUsage(models.Model):
     api_key = models.ForeignKey(APIKey, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -24,6 +23,14 @@ class TokenUsage(models.Model):
         """ Get total input and output tokens used across all API keys for a given day """
 
         total = cls.objects.filter(timestamp__date=date).aggregate(
+            total_input=models.Sum('input_tokens'),
+            total_output=models.Sum('output_tokens')
+        )
+        return total['total_input'] or 0, total['total_output'] or 0
+
+    @classmethod
+    def get_total_tokens_for_user(cls, key, date=timezone.now().date()):
+        total = cls.objects.filter(timestamp__date=date, api_key=key).aggregate(
             total_input=models.Sum('input_tokens'),
             total_output=models.Sum('output_tokens')
         )
